@@ -44,7 +44,7 @@ remote_state {
   }
 
   config = {
-    bucket         = "terraform-s3-bs-state-dev-${local.account_id}"
+    bucket         = "terraform-s3-bs-state-dev"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     region         = local.aws_region
     encrypt        = true

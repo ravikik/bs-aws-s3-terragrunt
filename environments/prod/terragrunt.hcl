@@ -9,17 +9,23 @@ terraform {
 }
 
 inputs = {
-  bucket_name = "my-app-prod-bucket-${get_aws_account_id()}"
+  bucket_name = "bs-app-prod-bucket-${get_aws_account_id()}"
 
-  enable_versioning = true
-  enable_encryption = true
+  enable_versioning = "true"
+  enable_encryption = "true"
   sse_algorithm     = "aws:kms"
-  # kms_master_key_id = "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+  # kms_master_key_id = "arn:aws:kms:us-east-2:308269940941:key/12345678-1234-1234-1234-123456789012"
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+  block_public_acls       = "true"
+  block_public_policy     = "true"
+  ignore_public_acls      = "true"
+  restrict_public_buckets = "true"
+
+  enable_lifecycle        = "true"
+  transition_days_ia      = "30"
+  transition_days_glacier = "90"
+  expiration_days         = "730"
+  enable_replication      = "false"
 
   lifecycle_rules = [
     {

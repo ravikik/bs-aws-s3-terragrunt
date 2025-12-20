@@ -11,14 +11,20 @@ terraform {
 inputs = {
   bucket_name = "bs-app-dev-bucket-${get_aws_account_id()}"
 
-  enable_versioning = true
-  enable_encryption = true
+  enable_versioning = "true"
+  enable_encryption = "true"
   sse_algorithm     = "AES256"
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+  block_public_acls       = "true"
+  block_public_policy     = "true"
+  ignore_public_acls      = "true"
+  restrict_public_buckets = "true"
+
+  enable_lifecycle    = "true"
+  transition_days_ia  = "30"
+  transition_days_glacier = "90"
+  expiration_days     = "365"
+  enable_replication  = "false"
 
   lifecycle_rules = [
     {

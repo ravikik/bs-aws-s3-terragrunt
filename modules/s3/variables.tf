@@ -4,15 +4,15 @@ variable "bucket_name" {
 }
 
 variable "enable_versioning" {
-  description = "Enable versioning for the S3 bucket"
-  type        = bool
-  default     = false
+  description = "Enable versioning for the S3 bucket (string: 'true' or 'false')"
+  type        = string
+  default     = "false"
 }
 
 variable "enable_encryption" {
-  description = "Enable server-side encryption for the S3 bucket"
-  type        = bool
-  default     = true
+  description = "Enable server-side encryption for the S3 bucket (string: 'true' or 'false')"
+  type        = string
+  default     = "true"
 }
 
 variable "sse_algorithm" {
@@ -28,27 +28,57 @@ variable "kms_master_key_id" {
 }
 
 variable "block_public_acls" {
-  description = "Block public ACLs"
-  type        = bool
-  default     = true
+  description = "Block public ACLs (string: 'true' or 'false')"
+  type        = string
+  default     = "true"
 }
 
 variable "block_public_policy" {
-  description = "Block public bucket policies"
-  type        = bool
-  default     = true
+  description = "Block public bucket policies (string: 'true' or 'false')"
+  type        = string
+  default     = "true"
 }
 
 variable "ignore_public_acls" {
-  description = "Ignore public ACLs"
-  type        = bool
-  default     = true
+  description = "Ignore public ACLs (string: 'true' or 'false')"
+  type        = string
+  default     = "true"
 }
 
 variable "restrict_public_buckets" {
-  description = "Restrict public bucket policies"
-  type        = bool
-  default     = true
+  description = "Restrict public bucket policies (string: 'true' or 'false')"
+  type        = string
+  default     = "true"
+}
+
+variable "enable_lifecycle" {
+  description = "Enable lifecycle rules (string: 'true' or 'false')"
+  type        = string
+  default     = "false"
+}
+
+variable "transition_days_ia" {
+  description = "Days before transitioning to Infrequent Access"
+  type        = string
+  default     = "30"
+}
+
+variable "transition_days_glacier" {
+  description = "Days before transitioning to Glacier"
+  type        = string
+  default     = "90"
+}
+
+variable "expiration_days" {
+  description = "Days before object expiration"
+  type        = string
+  default     = "365"
+}
+
+variable "enable_replication" {
+  description = "Enable cross-region replication (string: 'true' or 'false')"
+  type        = string
+  default     = "false"
 }
 
 variable "lifecycle_rules" {
