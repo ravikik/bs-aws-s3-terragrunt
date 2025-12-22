@@ -4,7 +4,10 @@
       "Bash(git init:*)",
       "Bash(mkdir:*)",
       "Bash(aws dynamodb create-table:*)",
-      "Bash(aws dynamodb wait:*)"
+      "Bash(aws dynamodb wait:*)",
+      "Bash(aws s3 mb:*)",
+      "Bash(aws s3api put-bucket-versioning:*)",
+      "Bash(aws s3api put-bucket-encryption:*)"
     ]
   }
 }
