@@ -161,66 +161,35 @@ aws iam create-open-id-connect-provider \
 
 #### 2. Create an IAM Role for GitHub Actions
 
-Create a trust policy file (`trust-policy.json`):
+Use the provided trust policy file:
 
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "arn:aws:iam::308269940941:oidc-provider/token.actions.githubusercontent.com"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
-        },
-        "StringLike": {
-          "token.actions.githubusercontent.com:sub": "repo:YOUR_GITHUB_ORG/YOUR_REPO_NAME:*"
-        }
-      }
-    }
-  ]
-}
-```
+**Note:** Update `YOUR_GITHUB_ORG/YOUR_REPO_NAME` in [iam-policies/github-actions-trust-policy.json](iam-policies/github-actions-trust-policy.json) with your actual GitHub organization and repository name.
 
 Create the role:
 
 ```bash
 aws iam create-role \
-  --role-name GitHubActionsS3Role \
-  --assume-role-policy-document file://trust-policy.json
+  --role-name github-actions-terragrunt \
+  --assume-role-policy-document file://iam-policies/github-actions-trust-policy.json
 ```
 
 #### 3. Attach Permissions Policy
 
-Create a permissions policy file (`permissions-policy.json`):
+Use the provided permissions policy with least-privilege access:
 
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:*",
-        "dynamodb:*"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```
+The [iam-policies/github-actions-permissions.json](iam-policies/github-actions-permissions.json) file includes:
+- S3 bucket management for `bs-app-*` buckets and state bucket
+- DynamoDB access for state locking
+- KMS encryption/decryption permissions
+- Scoped to specific resources for security
 
 Attach the policy:
 
 ```bash
 aws iam put-role-policy \
-  --role-name GitHubActionsS3Role \
+  --role-name github-actions-terragrunt \
   --policy-name S3DeploymentPolicy \
-  --policy-document file://permissions-policy.json
+  --policy-document file://iam-policies/github-actions-permissions.json
 ```
 
 #### 4. Add Secret to GitHub Repository
@@ -229,7 +198,7 @@ aws iam put-role-policy \
 2. Navigate to Settings → Secrets and variables → Actions
 3. Click "New repository secret"
 4. Name: `AWS_ROLE_ARN`
-5. Value: `arn:aws:iam::308269940941:role/GitHubActionsS3Role`
+5. Value: `arn:aws:iam::308269940941:role/github-actions-terragrunt`
 
 ### Workflow Features
 

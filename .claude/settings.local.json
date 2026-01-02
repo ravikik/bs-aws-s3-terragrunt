@@ -7,7 +7,9 @@
       "Bash(aws dynamodb wait:*)",
       "Bash(aws s3 mb:*)",
       "Bash(aws s3api put-bucket-versioning:*)",
-      "Bash(aws s3api put-bucket-encryption:*)"
+      "Bash(aws s3api put-bucket-encryption:*)",
+      "Bash(aws iam put-role-policy:*)",
+      "Bash(aws iam get-role-policy:*)"
     ]
   }
 }
