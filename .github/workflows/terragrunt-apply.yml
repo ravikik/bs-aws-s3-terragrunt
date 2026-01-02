@@ -144,45 +144,33 @@ jobs:
             let body;
 
             if (!hasChanges) {
-              body = `## ⚠️ No Terragrunt Changes Detected
-
-No \`terragrunt.hcl\` files were modified in this PR.
-
-**Environment:** \`${environment}\`
-**PR:** #${prNumber}
-**Workflow:** [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-`;
+              body = '## ⚠️ No Terragrunt Changes Detected\n\n' +
+                     'No `terragrunt.hcl` files were modified in this PR.\n\n' +
+                     '**Environment:** `' + environment + '`\n' +
+                     '**PR:** #' + prNumber + '\n' +
+                     '**Workflow:** [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})\n';
             } else if (success) {
               const directories = '${{ steps.changes.outputs.directories }}'.split(',');
-              const dirList = directories.map(d => `  - \`${d}\``).join('\n');
+              const dirList = directories.map(d => '  - `' + d + '`').join('\n');
 
-              body = `## ✅ Terragrunt Apply Successful
-
-Infrastructure has been successfully provisioned!
-
-**Environment:** \`${environment}\`
-**PR:** #${prNumber}
-**Applied Configurations:**
-${dirList}
-
-**Workflow:** [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
-### Next Steps
-- Verify resources in AWS Console
-- Check Backstage portal for updated resource status
-- User will be notified of completion
-`;
+              body = '## ✅ Terragrunt Apply Successful\n\n' +
+                     'Infrastructure has been successfully provisioned!\n\n' +
+                     '**Environment:** `' + environment + '`\n' +
+                     '**PR:** #' + prNumber + '\n' +
+                     '**Applied Configurations:**\n' +
+                     dirList + '\n\n' +
+                     '**Workflow:** [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\n' +
+                     '### Next Steps\n' +
+                     '- Verify resources in AWS Console\n' +
+                     '- Check Backstage portal for updated resource status\n' +
+                     '- User will be notified of completion\n';
             } else {
-              body = `## ❌ Terragrunt Apply Failed
-
-Infrastructure provisioning encountered errors.
-
-**Environment:** \`${environment}\`
-**PR:** #${prNumber}
-**Workflow:** [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
-Please check the workflow logs for details.
-`;
+              body = '## ❌ Terragrunt Apply Failed\n\n' +
+                     'Infrastructure provisioning encountered errors.\n\n' +
+                     '**Environment:** `' + environment + '`\n' +
+                     '**PR:** #' + prNumber + '\n' +
+                     '**Workflow:** [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\n' +
+                     'Please check the workflow logs for details.\n';
             }
 
             await github.rest.issues.createComment({
