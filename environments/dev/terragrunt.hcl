@@ -97,5 +97,5 @@ inputs = {
   }
     }
   ]
-  medallion_structure = false
+  medallion_structure = true
 }
