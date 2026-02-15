@@ -1,4 +1,4 @@
-name: Terragrunt Plan
+name: Terraform Validate
 
 on:
   pull_request:
@@ -9,9 +9,37 @@ permissions:
   pull-requests: write
 
 jobs:
-  terragrunt-plan:
-    name: Terragrunt Plan
+  validate:
+    name: Validate Terraform
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: modules
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      - name: Terraform Init
+        run: terraform init -backend=false
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -diff
+
+  plan:
+    name: Terragrunt Plan
+    needs: validate
+    if: ${{ vars.AWS_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      TERRAGRUNT_NON_INTERACTIVE: "true"
     defaults:
       run:
         working-directory: environments/dev
@@ -29,14 +57,7 @@ jobs:
         with:
           terragrunt-version: latest
 
-      - name: Terragrunt Init
-        run: terragrunt init -backend=false
-
-      - name: Terragrunt Validate
-        run: terragrunt validate
-
       - name: Terragrunt Plan
-        if: env.AWS_ACCESS_KEY_ID != ''
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
