@@ -40,6 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TERRAGRUNT_NON_INTERACTIVE: "true"
+      TF_CLI_ARGS_init: "-reconfigure"
     defaults:
       run:
         working-directory: environments/dev
